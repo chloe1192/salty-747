@@ -87,10 +87,20 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
         this.onDepArr = () => { B747_8_FMC_DepArrIndexPage.ShowPage1(this); };
         this.onRad = () => { B747_8_FMC_NavRadioPage.ShowPage(this); };
         this.onVNAV = () => { B747_8_FMC_VNAVPage.ShowPage1(this); };
+        this.onATC = () => {
+            FMCAtcMenu.ShowPage(this);
+        };
+        this.onFmcComm = () => {
+            FMCDlnkMenu.ShowPage(this);
+        };
         FMCIdentPage.ShowPage1(this);
 
         this.saltyBase = new SaltyBase();
         this.saltyBase.init();
+        
+        Include.addScript("/JS/debug.js", function () {
+            g_modDebugMgr.AddConsole(null);
+        });
     }
     onPowerOn() {
         super.onPowerOn();
@@ -125,6 +135,16 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
         if (input === "VNAV") {
             if (this.onVNAV) {
                 this.onVNAV();
+            }
+        }
+        if (input === "ATC") {
+            if (this.onATC) {
+                this.onATC();
+            }
+        }
+        if (input === "FMC_COMM") {
+            if (this.onFmcComm) {
+                this.onFmcComm();
             }
         }
         return false;
