@@ -102,6 +102,7 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
             in: 0,
         };
     }
+
     get templateID() { return "B747_8_FMC"; }
     connectedCallback() {
         super.connectedCallback();
@@ -113,6 +114,7 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
             });
         });
     }
+
     Init() {
         super.Init();
         let oat = SimVar.GetSimVarValue("AMBIENT TEMPERATURE", "celsius");
@@ -136,12 +138,169 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
         this.saltyBase = new SaltyBase();
         this.saltyBase.init();
     }
+
+    getTitle() {
+        if (this._title === undefined) {
+            this._title = this._titleElement.textContent;
+        }
+        return this._title;
+    }
+
+    setTitle(content) {
+        let color = content.split("[color]")[1];
+        if (!color) {
+            color = "white";
+        }
+        this._title = content.split("[color]")[0];
+        this._titleElement.classList.remove("white", "blue", "yellow", "green", "red", "inop");
+        this._titleElement.classList.add(color);
+        this._titleElement.textContent = this._title;
+    }
+
+    getPageCurrent() {
+        if (this._pageCurrent === undefined) {
+            this._pageCurrent = parseInt(this._pageCurrentElement.textContent);
+        }
+        return this._pageCurrent;
+    }
+
+    setPageCurrent(value) {
+        if (typeof (value) === "number") {
+            this._pageCurrent = value;
+        }
+        else if (typeof (value) === "string") {
+            this._pageCurrent = parseInt(value);
+        }
+        this._pageCurrentElement.textContent = (this._pageCurrent > 0 ? this._pageCurrent : "") + "";
+    }
+
+    getPageCount() {
+        if (this._pageCount === undefined) {
+            this._pageCount = parseInt(this._pageCountElement.textContent);
+        }
+        return this._pageCount;
+    }
+
+    setPageCount(value) {
+        if (typeof (value) === "number") {
+            this._pageCount = value;
+        }
+        else if (typeof (value) === "string") {
+            this._pageCount = parseInt(value);
+        }
+        this._pageCountElement.textContent = (this._pageCount > 0 ? this._pageCount : "") + "";
+        if (this._pageCount === 0) {
+            this.getChildById("page-slash").textContent = "";
+        }
+        else {
+            this.getChildById("page-slash").textContent = "/";
+        }
+    }
+
+    getLabel(row, col = 0) {
+        if (!this._labels[row]) {
+            this._labels[row] = [];
+        }
+        return this._labels[row][col];
+    }
+
+    setLabel(label, row, col = -1) {
+        if (col >= this._labelElements[row].length) {
+            return;
+        }
+        if (!this._labels[row]) {
+            this._labels[row] = [];
+        }
+        if (!label) {
+            label = "";
+        }
+        if (col === -1) {
+            for (let i = 0; i < this._labelElements[row].length; i++) {
+                this._labels[row][i] = "";
+                this._labelElements[row][i].textContent = "";
+            }
+            col = 0;
+        }
+        if (label === "__FMCSEPARATOR") {
+            label = "------------------------";
+        }
+        if (label !== "") {
+            let color = label.split("[color]")[1];
+            if (!color) {
+                color = "white";
+            }
+            let e = this._labelElements[row][col];
+            e.classList.remove("white", "blue", "yellow", "green", "red", "inop");
+            e.classList.add(color);
+            label = label.split("[color]")[0];
+        }
+        this._labels[row][col] = label;
+        this._labelElements[row][col].textContent = label;
+    }
+
+    getLine(row, col = 0) {
+        if (!this._lines[row]) {
+            this._lines[row] = [];
+        }
+        return this._lines[row][col];
+    }
+    
+    setLine(content, row, col = -1) {
+        if (col >= this._lineElements[row].length) {
+            return;
+        }
+        if (!content) {
+            content = "";
+        }
+        if (!this._lines[row]) {
+            this._lines[row] = [];
+        }
+        if (col === -1) {
+            for (let i = 0; i < this._lineElements[row].length; i++) {
+                this._lines[row][i] = "";
+                this._lineElements[row][i].textContent = "";
+            }
+            col = 0;
+        }
+        if (content === "__FMCSEPARATOR") {
+            content = "------------------------";
+        }
+        if (content !== "") {
+            if (content.indexOf("[s-text]") !== -1) {
+                content = content.replace("[s-text]", "");
+                this._lineElements[row][col].classList.add("s-text");
+            }
+            else {
+                this._lineElements[row][col].classList.remove("s-text");
+            }
+            let color = content.split("[color]")[1];
+            if (!color) {
+                color = "white";
+            }
+            let e = this._lineElements[row][col];
+            e.classList.remove("white", "blue", "yellow", "green", "red", "inop");
+            e.classList.add(color);
+            content = content.split("[color]")[0];
+        }
+        this._lines[row][col] = content;
+        this._lineElements[row][col].textContent = this._lines[row][col];
+    }
+    
+    getFOB(useLbs = false) {
+        if (useLbs) {
+            return SimVar.GetSimVarValue("FUEL TOTAL QUANTITY WEIGHT", "pound");
+        } else {
+            return (SimVar.GetSimVarValue("FUEL TOTAL QUANTITY WEIGHT", "pound") * 0.453592) / 1000;
+        }
+    }
+
     onPowerOn() {
         super.onPowerOn();
         this.deactivateLNAV();
         this.deactivateVNAV();
         Coherent.call("GENERAL_ENG_THROTTLE_MANAGED_MODE_SET", ThrottleMode.HOLD);
     }
+
     onUpdate(_deltaTime) {
         super.onUpdate(_deltaTime);
         if (this.refreshPageCallback && this._lastActiveWP != this.currFlightPlanManager.getActiveWaypointIndex() || this._wasApproachActive != this.currFlightPlanManager.isActiveApproach()) {
@@ -152,6 +311,7 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
         this.updateAutopilot();
         this.saltyBase.update();
     }
+
     onInputAircraftSpecific(input) {
         if (input === "LEGS") {
             if (this.onLegs) {

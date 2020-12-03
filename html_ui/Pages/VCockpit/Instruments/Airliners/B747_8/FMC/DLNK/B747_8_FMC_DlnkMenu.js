@@ -6,11 +6,11 @@ class FMCDlnkMenu {
             [],
             ["<PREFLIGHT", "WX INFO>"],
             [],
-            ["<ATC REQUEST", "SEND PIREP>"],
+            ["<PDC", "SEND PIREP>"],
             [],
             ["<PERF REQUEST", "ARR REPORT>"],
             [],
-            ["<WT/BAL", "DIVERTING>"],
+            ["<WT BAL", "DIVERTING>"],
             [],
             ["<OOOI STATUS", "MISC>"],
             [],
@@ -21,12 +21,24 @@ class FMCDlnkMenu {
             FMCDlnkPreflight.ShowPage1(fmc);
         };
 
+        fmc.onLeftInput[1] = () => {
+            FMCDlnkPdc.ShowPage(fmc);
+        };
+
         fmc.onLeftInput[2] = () => {
-            FMCDlnkPerfRequest.ShowPage();
+            FMCDlnkPerfRequest.ShowPage(fmc);
         };
 
         fmc.onLeftInput[3] = () => {
             FMCDlnkWtBal.ShowPage(fmc)
+        };
+
+        fmc.onLeftInput[4] = () => {
+            FMCDlnkOooi.ShowPage(fmc)
+        };
+
+        fmc.onLeftInput[5] = () => {
+            FMCDlnkFltLog.ShowPage(fmc)
         };
     }
 }

@@ -1,20 +1,26 @@
 class FMCDlnkWeather {
     static ShowPage(fmc) {
         fmc.clearDisplay();
+
+        let origin = "<----";
+        let destination = "---->";
+        let alternate = "<----";
+        let airport = "---->";
+        
         fmc.setTemplate([
-            ["DLNK INIT 1/2"],
-            ["FLT NUM", "UTC DATE"],
-            [fltNum, utcDate],
-            ["ORIG STA", "DEST STA"],
-            [origSta, destSta],
-            ["EDT UTC", "ETE"],
-            [edtUtc, ete],
-            ["AIRLINE ID", "ATC FLT ID"],
-            [airlineId, atcFltId],
-            ["", "FOB"],
-            ["", fob],
-            ["", "INIT DATA"],
-            ["<ACARS MENU", "PREFLT*"]
+            ["WX REQUEST"],
+            ["\xa0ORIGIN", "DESTINATION\xa0"],
+            [origin, destination],
+            ["\xa0ALTERNATE", "AIRPORT\xa0"],
+            [alternate, airport],
+            [""],
+            [""],
+            ["", "REQUEST\xa0"],
+            ["", "METAR>"],
+            ["\xa0RECEIVED", "REQUEST\xa0"],
+            ["<MESSAGES", "TAF>"],
+            ["\xa0RETURN TO", "REQUEST\xa0"],
+            ["<DLNK MENU", "SHORT TAF>"]
         ]);
     }
 }

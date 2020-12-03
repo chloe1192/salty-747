@@ -1,46 +1,85 @@
 class FMCOptionsMenu {
     static ShowPage(fmc) {
+        fmc.clearDisplay();
+        
         const simbriefUsername = SaltyDataStore.get("OPTIONS_SIMBRIEF_USERNAME", "");
         const simbriefUsernameCell = simbriefUsername != "" ? simbriefUsername : "[ ]";
         const weightUnits = SaltyDataStore.get("OPTIONS_WEIGHT_UNITS", "");
-        const weightUnitsCell = simbriefUsername != "" ? simbriefUsername : "[ ]";
+        const weightUnitsCell = weightUnits != "" ? weightUnits : "";
         const tempUnits = SaltyDataStore.get("OPTIONS_TEMP_UNITS", "");
-        const tempUnitsCell = simbriefUsername != "" ? simbriefUsername : "[ ]";
-        const acftRegistration = "D-ABYT";
-        const selCal = "DSLM";
+        const tempUnitsCell = tempUnits != "" ? tempUnits : "";
+        const paxWeight = SaltyDataStore.get("OPTIONS_PAX_WEIGHT", "");
+        const paxWeightCell = paxWeight != "" ? paxWeight : "175";
+        const bagWeight = SaltyDataStore.get("OPTIONS_BAG_WEIGHT", "");
+        const bagWeightCell = bagWeight != "" ? bagWeight : "55";
+        const acftRegistration = SimVar.GetSimVarValue("ATC ID", "string");
+        const selCal = "DS-LM";
 
-        fmc.clearDisplay();
         fmc.setTemplate([
             ["COMPANY OPTIONS"],
-            ["SIMBRIEF USERNAME"],
+            ["SIMBRIEF USER"],
             [`${simbriefUsernameCell}[color]green`],
-            ["WEIGHT UNITS", "TEMPERATURE UNITS"],
+            ["WEIGHT UNITS", "TEMP UNITS"],
             [weightUnitsCell, tempUnitsCell],
-            [],
             ["REG", "SELCAL"],
-            [acftRegistration, selcal],
+            [acftRegistration, selCal],
             ["PAX WEIGHT", "BAG WEIGHT"],
-            ["175", "55"],
+            [paxWeightCell, bagWeightCell],
+            [],
             [],
             [],
             []
         ]);
 
-        mcdu.onLeftInput[1] = (value) => {
+        fmc.onLeftInput[0] = () => {
+            let value = fmc.inOut;
+            fmc.clearUserInput();
             if (value === FMCMainDisplay.clrValue) {
                 SaltyDataStore.set("OPTIONS_SIMBRIEF_USERNAME", "");
             } else {
                 SaltyDataStore.set("OPTIONS_SIMBRIEF_USERNAME", value);
             }
-            FMCOptionsMenu.ShowPage(mcdu);
+            FMCOptionsMenu.ShowPage(fmc);
         };
 
-        fmc.onLeftInput[2] = () => {
-            FMCDlnkPerfRequest.ShowPage();
+        fmc.onLeftInput[1] = () => {
+            if (weightUnits == "lbs") {
+                SaltyDataStore.set("OPTIONS_WEIGHT_UNITS", "kg");
+            } else {
+                SaltyDataStore.set("OPTIONS_WEIGHT_UNITS", "lbs");
+            }
+            FMCOptionsMenu.ShowPage(fmc);
         };
 
         fmc.onLeftInput[3] = () => {
-            FMCDlnkWtBal.ShowPage(fmc)
+            let value = fmc.inOut;
+            fmc.clearUserInput();
+            if (value === FMCMainDisplay.clrValue) {
+                SaltyDataStore.set("OPTIONS_PAX_WEIGHT", "175");
+            } else {
+                SaltyDataStore.set("OPTIONS_PAX_WEIGHT", value);
+            }
+            FMCOptionsMenu.ShowPage(fmc);
+        };
+
+        fmc.onRightInput[1] = () => {
+            if (tempUnits == "fahrenheit") {
+                SaltyDataStore.set("OPTIONS_TEMP_UNITS", "celsius");
+            } else if (tempUnits == "celsius") {
+                SaltyDataStore.set("OPTIONS_TEMP_UNITS", "fahrenheit");
+            }
+            FMCOptionsMenu.ShowPage(fmc);
+        };
+
+        fmc.onRightInput[3] = () => {
+            let value = fmc.inOut;
+            fmc.clearUserInput();
+            if (value === FMCMainDisplay.clrValue) {
+                SaltyDataStore.set("OPTIONS_BAG_WEIGHT", "55");
+            } else {
+                SaltyDataStore.set("OPTIONS_BAG_WEIGHT", value);
+            }
+            FMCOptionsMenu.ShowPage(fmc);
         };
     }
 }

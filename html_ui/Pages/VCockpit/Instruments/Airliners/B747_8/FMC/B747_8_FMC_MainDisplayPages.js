@@ -12,13 +12,25 @@ class FMCMainDisplayPages {
             [],
             ["<SALTY"],
             [],
-            ["", ""],
+            ["", "OPTIONS>"],
             [],
             ["<CMC"]
         ]);
-        fmc.onLeftInput[0] = () => { FMCIdentPage.ShowPage1(fmc); };
-        fmc.onLeftInput[1] = () => { FMCDlnkMenu.ShowPage(fmc); };
-        fmc.onLeftInput[3] = () => { FMCSaltyOptions.ShowPage1(fmc); };
+        fmc.onLeftInput[0] = () => { 
+            FMCIdentPage.ShowPage1(fmc); 
+        };
+
+        fmc.onLeftInput[1] = () => { 
+            FMCDlnkMenu.ShowPage(fmc); 
+        };
+        
+        fmc.onLeftInput[3] = () => {
+            FMCSaltyOptions.ShowPage1(fmc); 
+        };
+
+        fmc.onRightInput[4] = () => {
+            FMCOptionsMenu.ShowPage(fmc);
+        };
     }
     static PerfInitPage(fmc) {
     }
