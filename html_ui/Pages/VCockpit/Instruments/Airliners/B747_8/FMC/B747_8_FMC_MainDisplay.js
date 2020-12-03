@@ -63,6 +63,44 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
         this._aThrHasActivated = false;
         this._hasReachedTopOfDescent = false;
         this._apCooldown = 500;
+        this.simbrief = {
+            route: "",
+            cruiseAltitude: "",
+            originIcao: "",
+            destinationIcao: "",
+            blockFuel: "",
+            payload: "",
+            estZfw: "",
+            sendStatus: "READY",
+            costIndex: "",
+            navlog: [],
+            icao_airline: "",
+            flight_number: "",
+            alternateIcao: "",
+            avgTropopause: "",
+            ete: "",
+            blockTime: "",
+            outTime: "",
+            onTime: "",
+            inTime: "",
+            offTime: "",
+            taxiFuel: "",
+            tripFuel: ""
+        };
+        this.aocWeight = {
+            blockFuel: "",
+            estZfw: "",
+            taxiFuel: "",
+            tripFuel: "",
+            payload: ""
+        };
+        this.aocTimes = {
+            doors: 0,
+            off: 0,
+            out: 0,
+            on: 0,
+            in: 0,
+        };
     }
     get templateID() { return "B747_8_FMC"; }
     connectedCallback() {
@@ -87,20 +125,16 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
         this.onDepArr = () => { B747_8_FMC_DepArrIndexPage.ShowPage1(this); };
         this.onRad = () => { B747_8_FMC_NavRadioPage.ShowPage(this); };
         this.onVNAV = () => { B747_8_FMC_VNAVPage.ShowPage1(this); };
-        this.onATC = () => {
+        this.onAtc = () => {
             FMCAtcMenu.ShowPage(this);
         };
         this.onFmcComm = () => {
             FMCDlnkMenu.ShowPage(this);
         };
-        FMCIdentPage.ShowPage1(this);
+        FMCMainDisplayPages.MenuPage(this);
 
         this.saltyBase = new SaltyBase();
         this.saltyBase.init();
-        
-        Include.addScript("/JS/debug.js", function () {
-            g_modDebugMgr.AddConsole(null);
-        });
     }
     onPowerOn() {
         super.onPowerOn();
@@ -119,7 +153,6 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
         this.saltyBase.update();
     }
     onInputAircraftSpecific(input) {
-        console.log("B747_8_FMC_MainDisplay.onInputAircraftSpecific input = '" + input + "'");
         if (input === "LEGS") {
             if (this.onLegs) {
                 this.onLegs();
@@ -137,12 +170,7 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
                 this.onVNAV();
             }
         }
-        if (input === "ATC") {
-            if (this.onATC) {
-                this.onATC();
-            }
-        }
-        if (input === "FMC_COMM") {
+        if (input === "FMCCOMM") {
             if (this.onFmcComm) {
                 this.onFmcComm();
             }

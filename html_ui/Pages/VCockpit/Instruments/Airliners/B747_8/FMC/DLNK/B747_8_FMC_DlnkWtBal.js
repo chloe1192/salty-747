@@ -1,10 +1,14 @@
-class FMCDlnkMenu {
+class FMCDlnkWtBal {
     static ShowPage(fmc) {
         fmc.clearDisplay();
+
+        const fuel = SimVar.GetSimVarValue("FUEL TOTAL QUANTITY", "kg");
+        const cg = SimVar.GetSimVarValue("CG PERCENT");
+        
         fmc.setTemplate([
-            ["ACARS MAIN MENU"],
-            [],
-            ["<PREFLIGHT", "WX INFO>"],
+            ["WT/BAL"],
+            ["FUEL", "CG"],
+            [fuel, cg],
             [],
             ["<ATC REQUEST", "SEND PIREP>"],
             [],
@@ -16,17 +20,5 @@ class FMCDlnkMenu {
             [],
             ["<FLT LOG", "MESSAGES>"]
         ]);
-
-        fmc.onLeftInput[0] = () => {
-            FMCDlnkPreflight.ShowPage1(fmc);
-        };
-
-        fmc.onLeftInput[2] = () => {
-            FMCDlnkPerfRequest.ShowPage();
-        };
-
-        fmc.onLeftInput[3] = () => {
-            FMCDlnkWtBal.ShowPage(fmc)
-        };
     }
 }

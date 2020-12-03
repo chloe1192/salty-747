@@ -1,4 +1,4 @@
-class FMCDlnkPreflight {
+class FMCDlnkInflight {
     static ShowPage1(fmc) {
         fmc.clearDisplay();
         fmc.setTemplate([

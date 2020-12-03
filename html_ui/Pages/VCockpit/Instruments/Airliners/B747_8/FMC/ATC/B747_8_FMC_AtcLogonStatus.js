@@ -3,18 +3,18 @@ class FMCAtcLogonSatus {
         fmc.clearDisplay();
         fmc.setTemplate([
             ["ATC LOGON/STATUS"],
+            ["\xa0LOGON TO"],
+            ["____"],
+            ["\xa0FLT NO"],
+            ["______"],
             [],
-            ["<PREFLIGHT", "WX INFO>"],
             [],
-            ["<ATC REQUEST", "SEND PIREP>"],
             [],
-            ["<PERF REQUEST", "ARR REPORT>"],
             [],
-            ["<WT/BAL", "DIVERTING>"],
-            [],
-            ["<OOOI STATUS", "MISC>"],
-            [],
-            ["<FLT LOG", "MESSAGES>"]
+            ["\xa0ADS (ARM)", "ADS EMERG"],
+            ["<ADS", "MISC>"],
+            ["__FMCSEPARATOR", "DATALINK"],
+            ["", "NO COMM"]
         ]);
 
         fmc.onLeftInput[0] = () => {

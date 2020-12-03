@@ -2,23 +2,59 @@ class FMCAtcMenu {
     static ShowPage(fmc) {
         fmc.clearDisplay();
         fmc.setTemplate([
-            ["ACARS MAIN MENU"],
+            ["ATC INDEX"],
             [],
-            ["<PREFLIGHT", "WX INFO>"],
+            ["<EMERGENCY", "POS REPORT>"],
             [],
-            ["<ATC REQUEST", "SEND PIREP>"],
+            ["<REQUEST", "WHEN CAN WE>"],
             [],
-            ["<PERF REQUEST", "ARR REPORT>"],
+            ["<REPORT"],
             [],
-            ["<WT/BAL", "DIVERTING>"],
+            ["<LOG", "CLEARANCE>"],
             [],
-            ["<OOOI STATUS", "MISC>"],
-            [],
-            ["<FLT LOG", "MESSAGES>"]
+            ["<LOGON/STATUS", "VOICE>"],
+            ["", "", "__FMCSEPARATOR"],
+            ["<PRINT LOG"]
         ]);
 
         fmc.onLeftInput[0] = () => {
-            FMCDlnkPreflight.ShowPage1(fmc);
+            FMCAtcEmergency.ShowPage(fmc);
+        };
+
+        fmc.onLeftInput[1] = () => {
+            FMCAtcRequest.ShowPage(fmc);
+        };
+
+        fmc.onLeftInput[2] = () => {
+            FMCAtcReport.ShowPage(fmc);
+        };
+
+        fmc.onLeftInput[3] = () => {
+            FMCAtcLog.ShowPage(fmc);
+        };
+
+        fmc.onLeftInput[4] = () => {
+            FMCAtcLogonSatus.ShowPage(fmc);
+        };
+
+        fmc.onLeftInput[5] = () => {
+            FMCAtcPrintLog.ShowPage(fmc);
+        };
+
+        fmc.onRightInput[0] = () => {
+            FMCAtcPosReport.ShowPage(fmc);
+        };
+
+        fmc.onRightInput[1] = () => {
+            FMCAtcWhenCanWe.ShowPage(fmc);
+        };
+
+        fmc.onRightInput[3] = () => {
+            FMCAtcClearance.ShowPage(fmc);
+        };
+
+        fmc.onRightInput[4] = () => {
+            FMCAtcVoice.ShowPage(fmc);
         };
     }
 }
