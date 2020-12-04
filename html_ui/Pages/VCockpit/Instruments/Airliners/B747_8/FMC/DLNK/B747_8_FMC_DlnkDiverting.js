@@ -1,4 +1,4 @@
-class FMCDlnkMessages {
+class FMCDlnkDiverting {
     static ShowPage(fmc) {
         fmc.clearDisplay();
         fmc.setTemplate([

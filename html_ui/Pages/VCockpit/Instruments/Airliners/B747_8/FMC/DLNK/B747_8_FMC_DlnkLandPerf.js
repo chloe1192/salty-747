@@ -1,4 +1,4 @@
-class FMCDlnkAtis {
+class FMCDlnkLandPerf {
     static ShowPage(fmc) {
         fmc.clearDisplay();
         fmc.setTemplate([

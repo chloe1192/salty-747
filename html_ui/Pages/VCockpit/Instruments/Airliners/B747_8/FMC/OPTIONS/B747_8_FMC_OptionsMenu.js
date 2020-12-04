@@ -9,9 +9,9 @@ class FMCOptionsMenu {
         const tempUnits = SaltyDataStore.get("OPTIONS_TEMP_UNITS", "");
         const tempUnitsCell = tempUnits != "" ? tempUnits : "";
         const paxWeight = SaltyDataStore.get("OPTIONS_PAX_WEIGHT", "");
-        const paxWeightCell = paxWeight != "" ? paxWeight : "175";
+        const paxWeightCell = paxWeight != "" ? paxWeight : "";
         const bagWeight = SaltyDataStore.get("OPTIONS_BAG_WEIGHT", "");
-        const bagWeightCell = bagWeight != "" ? bagWeight : "55";
+        const bagWeightCell = bagWeight != "" ? bagWeight : "";
         const acftRegistration = SimVar.GetSimVarValue("ATC ID", "string");
         const selCal = "DS-LM";
 

@@ -4,24 +4,30 @@ class FMCDlnkWtBal {
 
         let fob = fmc.getFOB();
         let fobCell = "--.-";
+        let weights = fmc.getWeights();
+
         if (fob) {
-            fobCell = fob;
+            fobCell = fmc.formatWeight(fob);
         }
 
         fmc.setTemplate([
             ["WT BAL PAGE"],
-            [fobCell, ""],
-            [""],
-            [""],
-            [""],
-            [""],
-            [""],
-            [""],
-            [""],
-            [""],
-            [""],
-            [""],
-            [""]
-        ]);
+            ["\xa0FOB", "PAYLOAD\xa0"],
+            [fobCell, ],
+            [],
+            ["", ""],
+            [],
+            ["", ""],
+            [],
+            ["", ""],
+            [],
+            ["", ""],
+            ["\xa0RETURN TO"],
+            ["<DLNK MENU"]
+        ]);        
+        
+        fmc.onLeftInput[5] = () => {
+            FMCDlnkMenu.ShowPage1(fmc);
+        }
     }
 }

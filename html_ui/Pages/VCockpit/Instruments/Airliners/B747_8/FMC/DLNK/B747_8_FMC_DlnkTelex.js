@@ -1,4 +1,4 @@
-class FMCDlnkAtis {
+class FMCDlnkTelex {
     static ShowPage(fmc) {
         fmc.clearDisplay();
         fmc.setTemplate([

@@ -1,8 +1,8 @@
 class FMCDlnkMenu {
-    static ShowPage(fmc) {
+    static ShowPage1(fmc) {
         fmc.clearDisplay();
         fmc.setTemplate([
-            ["ACARS MAIN MENU"],
+            ["DLNK MAIN MENU", "1", "2"],
             [],
             ["<PREFLIGHT", "WX INFO>"],
             [],
@@ -16,6 +16,10 @@ class FMCDlnkMenu {
             [],
             ["<FLT LOG", "MESSAGES>"]
         ]);
+
+        fmc.onNextPage = () => {
+            FMCDlnkMenu.ShowPage2(fmc);
+        }
 
         fmc.onLeftInput[0] = () => {
             FMCDlnkPreflight.ShowPage1(fmc);
@@ -39,6 +43,61 @@ class FMCDlnkMenu {
 
         fmc.onLeftInput[5] = () => {
             FMCDlnkFltLog.ShowPage(fmc)
+        };
+
+        fmc.onRightInput[0] = () => {
+            FMCDlnkWeather.ShowPage(fmc);
+        };
+
+        fmc.onRightInput[1] = () => {
+            FMCDlnkInflight.ShowPage(fmc);
+        };
+
+        fmc.onRightInput[2] = () => {
+            FMCDlnkPostflight.ShowPage(fmc);
+        };
+
+        fmc.onRightInput[3] = () => {
+            FMCDlnkWtBal.ShowPage(fmc)
+        };
+
+        fmc.onRightInput[4] = () => {
+            FMCDlnkMisc.ShowPage(fmc)
+        };
+
+        fmc.onRightInput[5] = () => {
+            FMCDlnkMessages.ShowPage(fmc)
+        };
+    }
+
+    static ShowPage2(fmc) {
+        fmc.clearDisplay();
+        fmc.setTemplate([
+            ["DLNK MAIN MENU", "2", "2"],
+            [],
+            ["<ATIS", "LOADSHEET>"],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ]);        
+
+        fmc.onPrevPage = () => {
+            FMCDlnkMenu.ShowPage1(fmc);
+        }
+
+        fmc.onLeftInput[0] = () => {
+            FMCDlnkAtis.ShowPage(fmc);
+        };
+
+        fmc.onRightInput[0] = () => {
+            FMCDlnkLoadsheet.ShowPage(fmc);
         };
     }
 }

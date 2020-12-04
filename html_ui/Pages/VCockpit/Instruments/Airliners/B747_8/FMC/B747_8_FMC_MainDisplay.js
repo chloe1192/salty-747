@@ -131,7 +131,7 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
             FMCAtcMenu.ShowPage(this);
         };
         this.onFmcComm = () => {
-            FMCDlnkMenu.ShowPage(this);
+            FMCDlnkMenu.ShowPage1(this);
         };
         FMCMainDisplayPages.MenuPage(this);
 
@@ -288,7 +288,7 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
     
     getFOB(useLbs = false) {
         if (useLbs) {
-            return SimVar.GetSimVarValue("FUEL TOTAL QUANTITY WEIGHT", "pound");
+            return SimVar.GetSimVarValue("FUEL TOTAL QUANTITY WEIGHT", "pound") / 1000;
         } else {
             return (SimVar.GetSimVarValue("FUEL TOTAL QUANTITY WEIGHT", "pound") * 0.453592) / 1000;
         }
@@ -310,6 +310,10 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
         }
         this.updateAutopilot();
         this.saltyBase.update();
+    }
+
+    formatWeight(value) {
+        return (value).toFixed(1);
     }
 
     onInputAircraftSpecific(input) {

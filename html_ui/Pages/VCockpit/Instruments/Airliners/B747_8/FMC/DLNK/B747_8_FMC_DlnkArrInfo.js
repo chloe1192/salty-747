@@ -1,4 +1,4 @@
-class FMCDlnkAtis {
+class FMCDlnkArrInfo {
     static ShowPage(fmc) {
         fmc.clearDisplay();
         fmc.setTemplate([

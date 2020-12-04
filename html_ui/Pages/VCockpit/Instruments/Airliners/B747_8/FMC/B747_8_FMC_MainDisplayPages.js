@@ -21,7 +21,7 @@ class FMCMainDisplayPages {
         };
 
         fmc.onLeftInput[1] = () => { 
-            FMCDlnkMenu.ShowPage(fmc); 
+            FMCDlnkMenu.ShowPage1(fmc); 
         };
         
         fmc.onLeftInput[3] = () => {

@@ -20,7 +20,7 @@ const getSimBriefPlan = (fmc) => {
 
     fmc.simbrief["sendStatus"] = "REQUESTING";
 
-    return SimBriefApi.getSimBriefPlan(simBriefUsername)
+    return CompanyRequestsApi.getSimBriefPlan(simBriefUsername)
         .then(data => {
             fmc.simbrief["route"] = data.general.route;
             fmc.simbrief["cruiseAltitude"] = data.general.initial_altitude;
@@ -54,4 +54,49 @@ const getSimBriefPlan = (fmc) => {
 
             fmc.simbrief["sendStatus"] = "READY";
         });
+};
+
+
+const getMETAR = async (icaos, lines, store, updateView) => {
+    const storedMetarSrc = SaltyDataStore.get("CONFIG_METAR_SRC", "MSFS");
+    for (const icao of icaos) {
+        if (icao !== "") {
+            await CompanyRequestsApi.getMetar(icao, srcMap[storedMetarSrc])
+                .then((data) => {
+                    lines.push(`METAR ${icao}[color]blue`);
+                    const newLines = wordWrapToStringList(data.metar, 25);
+                    newLines.forEach(l => lines.push(l.concat("[color]green")));
+                    lines.push(msgSep);
+                })
+                .catch(() => {
+                    lines.push(`METAR ${icao}[color]blue`);
+                    lines.push('STATION NOT AVAILABLE[color]red');
+                    lines.push(msgSep);
+                });
+        }
+    }
+    store["sendStatus"] = "SENT";
+    updateView();
+};
+
+const getTAF = async (icaos, lines, store, updateView) => {
+    const storedTafSrc = SaltyDataStore.get("CONFIG_TAF_SRC", "NOAA");
+    for (const icao of icaos) {
+        if (icao !== "") {
+            await CompanyRequestsApi.getTaf(icao, srcMap[storedTafSrc])
+                .then((data) => {
+                    lines.push(`TAF ${icao}[color]blue`);
+                    const newLines = wordWrapToStringList(data.taf, 25);
+                    newLines.forEach(l => lines.push(l.concat("[color]green")));
+                    lines.push(msgSep);
+                })
+                .catch(() => {
+                    lines.push(`TAF ${icao}[color]blue`);
+                    lines.push('STATION NOT AVAILABLE[color]red');
+                    lines.push(msgSep);
+                });
+        }
+    }
+    store["sendStatus"] = "SENT";
+    updateView();
 };
