@@ -29,7 +29,7 @@ class FMCMainDisplayPages {
         };
 
         fmc.onRightInput[4] = () => {
-            FMCOptionsMenu.ShowPage(fmc);
+            FMCOptionsMenu.ShowPage1(fmc);
         };
     }
     static PerfInitPage(fmc) {

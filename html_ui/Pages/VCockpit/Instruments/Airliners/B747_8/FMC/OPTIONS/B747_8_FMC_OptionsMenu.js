@@ -1,9 +1,10 @@
 class FMCOptionsMenu {
-    static ShowPage(fmc) {
+    static ShowPage1(fmc) {
         fmc.clearDisplay();
         
         const simbriefUsername = SaltyDataStore.get("OPTIONS_SIMBRIEF_USERNAME", "");
         const simbriefUsernameCell = simbriefUsername != "" ? simbriefUsername : "[ ]";
+        const companyName = SimVar.GetSimVarValue("ATC AIRLINE", "string");
         const weightUnits = SaltyDataStore.get("OPTIONS_WEIGHT_UNITS", "");
         const weightUnitsCell = weightUnits != "" ? weightUnits : "";
         const tempUnits = SaltyDataStore.get("OPTIONS_TEMP_UNITS", "");
@@ -17,8 +18,8 @@ class FMCOptionsMenu {
 
         fmc.setTemplate([
             ["COMPANY OPTIONS"],
-            ["SIMBRIEF USER"],
-            [`${simbriefUsernameCell}[color]green`],
+            ["SIMBRIEF USER","COMPANY ICAO"],
+            [`${simbriefUsernameCell}[color]green`, companyName],
             ["WEIGHT UNITS", "TEMP UNITS"],
             [weightUnitsCell, tempUnitsCell],
             ["REG", "SELCAL"],
@@ -30,6 +31,10 @@ class FMCOptionsMenu {
             [],
             []
         ]);
+
+        fmc.onNextPage = () => {
+            FMCOptionsMenu.ShowPage2(fmc);
+        }
 
         fmc.onLeftInput[0] = () => {
             let value = fmc.inOut;
@@ -78,6 +83,110 @@ class FMCOptionsMenu {
                 SaltyDataStore.set("OPTIONS_BAG_WEIGHT", "55");
             } else {
                 SaltyDataStore.set("OPTIONS_BAG_WEIGHT", value);
+            }
+            FMCOptionsMenu.ShowPage(fmc);
+        };
+    }
+
+    static ShowPage2(fmc) {   
+        fmc.clearDisplay();
+        
+        let upperDeck = "---";
+        let firstClass = "---.-";
+        let business = "---";
+        let pEconomy = "---";
+        let fwdEconomy = "---";
+        let aftEconomy = "---";
+
+        upperDeck = SaltyDataStore.get("OPTIONS_UPPER_DECK", "");
+        firstClass = SaltyDataStore.get("OPTIONS_FIRST_CLASS", "");
+        business = SaltyDataStore.get("OPTIONS_BUSINESS_CLASS", "");
+        pEconomy = SaltyDataStore.get("OPTIONS_PREMIUM_ECONOMY", "");
+        fwdEconomy = SaltyDataStore.get("OPTIONS_FWD_ECONOMY", "");
+        aftEconomy = SaltyDataStore.get("OPTIONS_AFT_ECONOMY", "");
+
+        fmc.setTemplate([
+            ["PAX CAPACITY"],
+            ["\xa0UPPER DECK", "FIRST CLASS\xa0"],
+            [upperDeck, firstClass],
+            ["\xa0BUSINESS CLASS", "PREMIUM ECONOMY\xa0"],
+            [business, pEconomy],
+            ["\xa0FWD ECONOMY", "AFT ECONOMY\xa0"],
+            [fwdEconomy, aftEconomy],
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ]);
+
+        fmc.onPrevPage = () => {
+            FMCOptionsMenu.ShowPage1(fmc);
+        }
+
+        fmc.onLeftInput[0] = () => {
+            let value = fmc.inOut;
+            fmc.clearUserInput();
+            if (value === FMCMainDisplay.clrValue) {
+                SaltyDataStore.set("OPTIONS_UPPER_DECK", "32");
+            } else {
+                SaltyDataStore.set("OPTIONS_UPPER_DECK", value);
+            }
+            FMCOptionsMenu.ShowPage(fmc);
+        };
+
+        fmc.onRightInput[0] = () => {
+            let value = fmc.inOut;
+            fmc.clearUserInput();
+            if (value === FMCMainDisplay.clrValue) {
+                SaltyDataStore.set("OPTIONS_FIRST_CLASS", "8");
+            } else {
+                SaltyDataStore.set("OPTIONS_FIRST_CLASS", value);
+            }
+            FMCOptionsMenu.ShowPage(fmc);
+        };
+
+        fmc.onLeftInput[1] = () => {
+            let value = fmc.inOut;
+            fmc.clearUserInput();
+            if (value === FMCMainDisplay.clrValue) {
+                SaltyDataStore.set("OPTIONS_BUSINESS_CLASS", "48");
+            } else {
+                SaltyDataStore.set("OPTIONS_BUSINESS_CLASS", value);
+            }
+            FMCOptionsMenu.ShowPage(fmc);
+        };
+
+        fmc.onRightInput[1] = () => {
+            let value = fmc.inOut;
+            fmc.clearUserInput();
+            if (value === FMCMainDisplay.clrValue) {
+                SaltyDataStore.set("OPTIONS_PREMIUM_ECONOMY", "32");
+            } else {
+                SaltyDataStore.set("OPTIONS_PREMIUM_ECONOMY", value);
+            }
+            FMCOptionsMenu.ShowPage(fmc);
+        };
+
+        fmc.onLeftInput[2] = () => {
+            let value = fmc.inOut;
+            fmc.clearUserInput();
+            if (value === FMCMainDisplay.clrValue) {
+                SaltyDataStore.set("OPTIONS_FWD_ECONOMY", "102");
+            } else {
+                SaltyDataStore.set("OPTIONS_FWD_ECONOMY", value);
+            }
+            FMCOptionsMenu.ShowPage(fmc);
+        };
+
+        fmc.onRightInput[2] = () => {
+            let value = fmc.inOut;
+            fmc.clearUserInput();
+            if (value === FMCMainDisplay.clrValue) {
+                SaltyDataStore.set("OPTIONS_AFT_ECONOMY", "142");
+            } else {
+                SaltyDataStore.set("OPTIONS_AFT_ECONOMY", value);
             }
             FMCOptionsMenu.ShowPage(fmc);
         };

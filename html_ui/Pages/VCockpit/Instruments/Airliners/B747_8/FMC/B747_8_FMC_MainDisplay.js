@@ -87,20 +87,46 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
             taxiFuel: "",
             tripFuel: ""
         };
-        this.aocWeight = {
+        this.weights = {
+            cg: "",
+            fuel: "",
+            payloadCount: "",
             blockFuel: "",
             estZfw: "",
             taxiFuel: "",
             tripFuel: "",
             payload: ""
         };
-        this.aocTimes = {
+        this.payloadStations = {
+            pilot: "",
+            coPilot: "",
+            businessClassUpperDeck: "",
+            firstClass: "",
+            businessClassMainDeck: "",
+            premiumEconomy: "",
+            fowardEconomyCabin: "",
+            rearEconomyCabin: "",
+            fowardBaggage: "",
+            rearBaggage: "",
+            crew: ""
+        }
+        this.times = {
             doors: 0,
             off: 0,
             out: 0,
             on: 0,
             in: 0,
         };
+        this.atc = {
+            isLogged = false,
+            logonAts = "",
+            adsStatus = 0,
+            adsEmergStatus = 0
+        }
+        this.company = {
+            comIcao = SimVar.GetSimVarValue("ATC AIRLINE", "string"),
+            
+        }
     }
 
     get templateID() { return "B747_8_FMC"; }
@@ -294,6 +320,24 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
         }
     }
 
+    getWeights(units) {
+        this.weights.cg = SimVar.GetSimVarValue("CG PERCENT", "percent");
+        this.weights.fuel = SimVar.GetSimVarValue("FUEL TOTAL QUANTITY WEIGHT", units);
+        this.payloadStations.pilot = SimVar.GetSimVarValue("PAYLOAD STATION WEIGHT:1", units);
+        this.payloadStations.coPilot = SimVar.GetSimVarValue("PAYLOAD STATION WEIGHT:2", units);
+        this.payloadStations.businessClassUpperDeck = SimVar.GetSimVarValue("PAYLOAD STATION WEIGHT:3", units);
+        this.payloadStations.firstClass = SimVar.GetSimVarValue("PAYLOAD STATION WEIGHT:4", units);
+        this.payloadStations.businessClassMainDeck = SimVar.GetSimVarValue("PAYLOAD STATION WEIGHT:5", units);
+        this.payloadStations.premiumEconomy = SimVar.GetSimVarValue("PAYLOAD STATION WEIGHT:6", units);
+        this.payloadStations.fowardEconomyCabin = SimVar.GetSimVarValue("PAYLOAD STATION WEIGHT:7", units);
+        this.payloadStations.rearEconomyCabin = SimVar.GetSimVarValue("PAYLOAD STATION WEIGHT:8", units);
+        this.payloadStations.fowardBaggage = SimVar.GetSimVarValue("PAYLOAD STATION WEIGHT:9", units);
+        this.payloadStations.rearBaggage = SimVar.GetSimVarValue("PAYLOAD STATION WEIGHT:10", units);
+        this.payloadStations.crew = SimVar.GetSimVarValue("PAYLOAD STATION WEIGHT:11", units);
+
+        return this.weights, this.payloadStations;
+    }
+
     onPowerOn() {
         super.onPowerOn();
         this.deactivateLNAV();
@@ -313,7 +357,15 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
     }
 
     formatWeight(value) {
-        return (value).toFixed(1);
+        return (+value).toFixed(1);
+    }
+    
+    formatWeightInTons(value) {
+        return (+value / 1000).toFixed(1);
+    }
+
+    formatPayloadWeight(value) {
+        return (+value).toFixed(0);
     }
 
     onInputAircraftSpecific(input) {

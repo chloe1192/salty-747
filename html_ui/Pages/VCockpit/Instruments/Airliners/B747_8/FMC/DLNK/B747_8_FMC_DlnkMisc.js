@@ -16,5 +16,9 @@ class FMCDlnkMisc {
             ["", "INIT DATA"],
             ["<ACARS MENU", "PREFLT*"]
         ]);
+
+        fmc.onLeftInput[5] = () => {
+            FMCDlnkMenu.ShowPage1(fmc);
+        }
     }
 }

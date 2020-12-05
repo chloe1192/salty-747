@@ -59,7 +59,7 @@ class FMCDlnkPdc {
             if (value === FMCMainDisplay.clrValue) {
                 store.freeText = "<";
             } else {
-                store.freeText = value;
+                store.freeText = "<" + value;
             }
             FMCDlnkPdc.ShowPage(fmc, store);
         };

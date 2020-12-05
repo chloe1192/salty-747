@@ -43,9 +43,6 @@ class CompanyRequestsApi {
                 return response.json();
             });
     }
-}
-
-class SimBriefApi {
     static getSimBriefPlan(username) {
         if (!username) {
             throw ("No SimBrief username provided");

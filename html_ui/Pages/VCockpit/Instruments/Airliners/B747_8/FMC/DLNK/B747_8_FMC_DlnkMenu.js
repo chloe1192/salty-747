@@ -10,7 +10,7 @@ class FMCDlnkMenu {
             [],
             ["<PERF REQUEST", "ARR REPORT>"],
             [],
-            ["<WT BAL", "DIVERTING>"],
+            ["<WT/BAL", "DIVERTING>"],
             [],
             ["<OOOI STATUS", "MISC>"],
             [],
@@ -34,7 +34,7 @@ class FMCDlnkMenu {
         };
 
         fmc.onLeftInput[3] = () => {
-            FMCDlnkWtBal.ShowPage(fmc)
+            FMCDlnkWtBal.ShowPage1(fmc)
         };
 
         fmc.onLeftInput[4] = () => {
@@ -77,7 +77,7 @@ class FMCDlnkMenu {
             [],
             ["<ATIS", "LOADSHEET>"],
             [],
-            [],
+            ["<RELEASE"],
             [],
             [],
             [],
@@ -93,6 +93,10 @@ class FMCDlnkMenu {
         }
 
         fmc.onLeftInput[0] = () => {
+            FMCDlnkAtis.ShowPage(fmc);
+        };
+
+        fmc.onLeftInput[1] = () => {
             FMCDlnkAtis.ShowPage(fmc);
         };
 

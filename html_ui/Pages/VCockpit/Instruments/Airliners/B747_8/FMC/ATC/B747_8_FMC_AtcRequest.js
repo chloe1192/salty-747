@@ -1,24 +1,29 @@
 class FMCAtcRequest {
     static ShowPage(fmc) {
         fmc.clearDisplay();
+
+        let alt = "-----";
+        let speed = "---";
+        let offset = "---";
+
         fmc.setTemplate([
             ["ATC REQUEST"],
-            ["ALTITUDE"],
+            ["\xa0ALTITUDE"],
             [alt],
-            ["SPEED"],
-            ["<ATC REQUEST", "SEND PIREP>"],
-            ["OFFSET"],
-            ["<PERF REQUEST", "ARR REPORT>"],
-            [],
-            ["ROUTE REQUEST", "DIVERTING>"],
-            [],
-            ["<ERASE REQUEST", "MISC>"],
-            ["", "", "-----------"],
-            ["<REQUEST", "VERIFY>"]
+            ["\xa0SPEED"],
+            [speed],
+            ["\xa0OFFSET"],
+            [offset],
+            [""],
+            ["<ROUTE REQUEST"],
+            [""],
+            ["<ERASE REQUEST"],
+            ["__FMCSEPARATOR"],
+            ["<INDEX", "VERIFY>"]
         ]);
 
-        fmc.onLeftInput[0] = () => {
-            FMCDlnkPreflight.ShowPage1(fmc);
+        fmc.onLeftInput[5] = () => {
+            FMCAtcMenu.ShowPage(fmc);
         };
     }
 }

@@ -10,7 +10,7 @@ class FMCDlnkPreflight {
         let edtUtc = "[--:--Z]";
         let ete = "[--:--Z]";
         let airlineId = "LH";
-        let atcFltId = "DLH260";
+        let atcFltId = "____";
         let fob = "--.-";
         let currentFob;
         let uplinkLabel = "INIT DATA";
@@ -19,6 +19,10 @@ class FMCDlnkPreflight {
         if (!fmc.flightPlanManager.getOrigin() || !fmc.flightPlanManager.getOrigin()) {
             uplinkLabel = "INIT DATA[color]inop";
             uplinkText = "UPLINK\xa0[color]inop";
+        }        
+
+        if (SimVar.GetSimVarValue("ATC FLIGHT NUMBER", "string")) {
+            atcFltId = SimVar.GetSimVarValue("ATC FLIGHT NUMBER", "string");
         }
         if (fmc.simbrief.originIcao) {
             origSta = `${fmc.simbrief.originIcao}`;

@@ -2,23 +2,23 @@ class FMCAtcClearance {
     static ShowPage(fmc) {
         fmc.clearDisplay();
         fmc.setTemplate([
-            ["ACARS MAIN MENU"],
+            ["VERIFY REQUEST"],
             [],
-            ["<PREFLIGHT", "WX INFO>"],
-            [],
-            ["<ATC REQUEST", "SEND PIREP>"],
-            [],
-            ["<PERF REQUEST", "ARR REPORT>"],
-            [],
-            ["<WT/BAL", "DIVERTING>"],
-            [],
-            ["<OOOI STATUS", "MISC>"],
-            [],
-            ["<FLT LOG", "MESSAGES>"]
+            ["REQUEST CLEARANCE"],
+            ["/FREE TEXT"],
+            ["<"],
+            [""],
+            ["<"],
+            [""],
+            ["<"],
+            ["", "REQUEST\xa0"],
+            ["", "SEND>"],
+            [""],
+            ["<INDEX"]
         ]);
 
-        fmc.onLeftInput[0] = () => {
-            FMCDlnkPreflight.ShowPage1(fmc);
+        fmc.onLeftInput[5] = () => {
+            FMCAtcMenu.ShowPage(fmc);
         };
     }
 }

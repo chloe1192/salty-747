@@ -2,23 +2,23 @@ class FMCAtcWhenCanWe {
     static ShowPage(fmc) {
         fmc.clearDisplay();
         fmc.setTemplate([
-            ["ACARS MAIN MENU"],
-            [],
-            ["<PREFLIGHT", "WX INFO>"],
-            [],
-            ["<ATC REQUEST", "SEND PIREP>"],
-            [],
-            ["<PERF REQUEST", "ARR REPORT>"],
-            [],
-            ["<WT/BAL", "DIVERTING>"],
-            [],
-            ["<OOOI STATUS", "MISC>"],
-            [],
-            ["<FLT LOG", "MESSAGES>"]
+            ["WHEN CAN WE EXPECT"],
+            ["\xa0CRZ CLB TO"],
+            ["-----"],
+            ["\xa0CLIMB TO"],
+            ["-----", "HIGHER ALT>"],
+            ["\xa0DESCEND TO TO"],
+            ["-----", "LOWER ALT>"],
+            ["\xa0SPEED TO"],
+            ["---", "BACK ON RTE>"],
+            [""],
+            [""],
+            ["__FMCSEPARATOR"],
+            ["<INDEX", "VERIFY>"]
         ]);
 
-        fmc.onLeftInput[0] = () => {
-            FMCDlnkPreflight.ShowPage1(fmc);
+        fmc.onLeftInput[5] = () => {
+            FMCAtcMenu.ShowPage(fmc);
         };
     }
 }
