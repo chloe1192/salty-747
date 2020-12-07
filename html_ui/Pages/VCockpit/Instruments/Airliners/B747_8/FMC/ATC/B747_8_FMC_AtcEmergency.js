@@ -62,7 +62,7 @@ class FMCAtcEmergency {
         }
     }
 
-    static ShowVerify1(fmc) {
+    static ShowVerify2(fmc) {
         fmc.clearDisplay();
 
         fmc.setTemplate([

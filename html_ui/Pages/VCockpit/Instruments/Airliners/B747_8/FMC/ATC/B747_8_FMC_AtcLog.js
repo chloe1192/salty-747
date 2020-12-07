@@ -2,23 +2,23 @@ class FMCAtcLog {
     static ShowPage(fmc) {
         fmc.clearDisplay();
         fmc.setTemplate([
-            ["ATC LOG"],
+            ["ACARS MAIN MENU"],
             [],
-            [""],
+            ["<PREFLIGHT", "WX INFO>"],
             [],
-            [""],
+            ["<ATC REQUEST", "SEND PIREP>"],
             [],
-            [""],
+            ["<PERF REQUEST", "ARR REPORT>"],
             [],
-            [""],
+            ["<WT/BAL", "DIVERTING>"],
             [],
-            [""],
+            ["<OOOI STATUS", "MISC>"],
             [],
-            ["<INDEX", "ERASE LOG>"]
+            ["<FLT LOG", "MESSAGES>"]
         ]);
 
-        fmc.onLeftInput[5] = () => {
-            FMCAtcMenu.ShowPage(fmc);
+        fmc.onLeftInput[0] = () => {
+            FMCDlnkPreflight.ShowPage1(fmc);
         };
     }
 }

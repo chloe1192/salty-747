@@ -1,5 +1,5 @@
 class FMCDlnkWeather {
-    static ShowPage(fmc, store = {"origin": "<----", "destination": "---->", "alternate": "<----", "airport": "---->", "sendStatus": ""}) {
+    static ShowPage(fmc, store = {"origin": "----", "destination": "----", "alternate": "----", "airport": "----", "sendStatus": ""}) {
         fmc.clearDisplay();
         
         if (fmc.flightPlanManager.getOrigin() && fmc.flightPlanManager.getDestination()) {
@@ -10,10 +10,10 @@ class FMCDlnkWeather {
         const updateView = () => {        
             fmc.setTemplate([
                 ["WX REQUEST"],
-                ["\xa0ORIGIN", "DESTINATION\xa0"],
-                [store.origin, store.destination],
-                ["\xa0ALTERNATE", "AIRPORT\xa0"],
-                [store.alternate, store.airport],
+                ["\xa0ORIGIN", "DESTINATION"],
+                [`<${store.origin}`, `${store.destination}>`],
+                ["\xa0ALTERNATE", "AIRPORT"],
+                [`<${store.alternate}`, `${store.airport}>`],
                 [""],
                 [""],
                 ["", "REQUEST\xa0"],
@@ -21,7 +21,7 @@ class FMCDlnkWeather {
                 ["\xa0RECEIVED", "REQUEST\xa0"],
                 ["<MESSAGES", "TAF>"],
                 ["\xa0RETURN TO", "REQUEST\xa0"],
-                ["<DLNK MENU", "SHORT TAF>"]
+                ["<ACARS MENU", "SHORT TAF>"]
             ]);
         };
         updateView();

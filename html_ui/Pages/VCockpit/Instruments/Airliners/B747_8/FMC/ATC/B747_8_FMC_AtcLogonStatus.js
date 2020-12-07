@@ -2,22 +2,25 @@ class FMCAtcLogonSatus {
     static ShowPage(fmc, store = {"canSend": ""}) {
         fmc.clearDisplay();
         
-        let logonTo = "____";
-        let fltNo = "______";
+        let logonTo = "□□□□";
+        let fltNo = "□□□□□□";
         let sendLabel = "";
-        /*let sendCell = "";*/
+        let sendCell = "";
         let adsLabel;
         let adsCell;
-        let adsStatus = 0;
+        let adsStatus;
         let adsEmergLabel;
         let adsEmergCell;
-        let adsEmergStatus = 0; 
+        let adsEmergStatus; 
         let dlnkStatus = "NO COMM";
 
-        if (fmc.atc.isLogged) {
+        if (fmc.atc.isLogged || fmc.atc.logonAts != "") {
             logonTo = fmc.atc.logonAts;
+            store.canSend = "SEND>";
             sendLabel = "LOGON";
             dlnkStatus = "READY";
+        }
+        if (fmc.atc.logonAts != "") {
         }
         if (SimVar.GetSimVarValue("ATC FLIGHT NUMBER", "string")) {
             fltNo = SimVar.GetSimVarValue("ATC FLIGHT NUMBER", "string");
@@ -26,35 +29,33 @@ class FMCAtcLogonSatus {
             0 = ARMED
             1 = OFF
         */
-        if (fmc.atc.adsStatus) {
-            adsStatus = fmc.atc.adsStatus;
-            switch (adsStatus) {
-                case 0:
-                    adsLabel = "ADS (ARM)";
-                    adsCell = "<SELECT OFF";
-                case 1:
-                    adsLabel = "ADS (OFF)";
-                    adsCell = "<SELECT ON";                    
-            }
+        adsStatus = fmc.atc.adsStatus;
+        console.log(adsStatus);
+        switch (adsStatus) {
+            case 0:
+                adsLabel = "ADS (OFF)";
+                adsCell = "<SELECT ON";
+            case 1:
+            adsLabel = "ADS (ARM)";
+            adsCell = "<SELECT OFF";          
         }
         /*  ADS EMERG STATUS
             0 = OFF
             1 = ON
             2 = UNAVAIL
         */
-        if (fmc.atc.adsEmergStatus) {
-            adsEmergStatus = fmc.atc.adsEmergStatus;
-            switch (adsEmergStatus) {
-                case 0:
-                    adsEmergLabel = "ADS EMERG";
-                    adsEmergCell = "<SELECT ON";
-                case 1:
-                    adsEmergLabel = "ADS EMERG";
-                    adsEmergCell = "<SELECT OFF";
-                case 2:
-                    adsEmergLabel = "";
-                    adsEmergCell = ""; 
-            }
+        adsEmergStatus = fmc.atc.adsEmergStatus;
+        console.log(adsEmergStatus);
+        switch (adsEmergStatus) {
+            case 0:
+                adsEmergLabel = "ADS EMERG";
+                adsEmergCell = "<SELECT ON";
+            case 1:
+                adsEmergLabel = "ADS EMERG";
+                adsEmergCell = "<SELECT OFF";
+            case 2:
+                adsEmergLabel = "";
+                adsEmergCell = ""; 
         }
 
         fmc.setTemplate([
@@ -83,7 +84,8 @@ class FMCAtcLogonSatus {
 
         fmc.onRightInput[0] = () => {
             if (store.canSend != "") {
-                store.canSend = "SENDING"
+                fmc.atc.isLogged = true;
+                store.canSend = "SENDING";
             }
             FMCAtcLogonSatus.ShowPage(fmc);
         };

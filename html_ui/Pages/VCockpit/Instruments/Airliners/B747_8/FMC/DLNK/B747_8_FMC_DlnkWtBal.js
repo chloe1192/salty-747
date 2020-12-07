@@ -34,12 +34,12 @@ class FMCDlnkWtBal {
             [taxiFuel, cg],
             ["TRIP FUEL", "PAYLOAD"],
             [tripFuel, payload],
+            ["\xa0BOARDING"],
+            ["<START"],
+            ["\xa0FUEL"],
+            ["<LOAD"],
             [""],
-            [""],
-            [""],
-            [""],
-            [""],
-            ["<DLNK MENU"]
+            ["<ACARS MENU"]
         ]);
 
         fmc.onNextPage = () => {

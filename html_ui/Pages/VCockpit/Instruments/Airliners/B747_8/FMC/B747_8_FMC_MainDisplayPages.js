@@ -1,31 +1,61 @@
 class FMCMainDisplayPages {
     static MenuPage(fmc) {
         fmc.clearDisplay();
-        fmc.setTemplate([
-            ["MENU"],
-            ["", "EFIS CP"],
-            ["<FMC", "", "<ACT>"],
-            ["", "EICAS CP"],
-            ["<DLNK"],
-            ["", "CTL PNL"],
-            ["", "OFF←→ON>"],
-            [],
-            ["<SALTY"],
-            [],
-            ["", "OPTIONS>"],
-            [],
-            ["<CMC"]
-        ]);
+
+        const activeSystem = fmc.activeSystem;
+        let textFMC;
+        let textDLNK;
+        let textSATCOM;
+        let textCMC;
+
+        if (activeSystem === "FMC") {
+            textFMC = "<ACT>";
+        }
+        if (activeSystem === "DLNK") {
+            textDLNK = "<ACT>";
+        }
+        if (activeSystem === "SATCOM") {
+            textSATCOM = "<ACT>";
+        }
+        if (activeSystem === "CMC") {
+            textCMC = "<ACT>";
+        }
+
+        const updateView = () => {
+            fmc.setTemplate([
+                ["MENU"],
+                ["", "EFIS CP"],
+                ["<FMC", "", textFMC],
+                ["", "EICAS CP"],
+                ["<DLNK", "", textDLNK],
+                ["", "CTL PNL"],
+                ["<SATCOM[color]inop", "OFF←→ON>", textSATCOM],
+                [],
+                ["<SALTY", "PAYLOAD>"],
+                [],
+                ["", "OPTIONS>"],
+                [],
+                ["<CMC[color]inop", "", textCMC]
+            ]);
+        }
+        updateView();
+
         fmc.onLeftInput[0] = () => { 
+            fmc.activeSystem = "FMC";
             FMCIdentPage.ShowPage1(fmc); 
         };
 
         fmc.onLeftInput[1] = () => { 
+            fmc.activeSystem = "DLNK";
             FMCDlnkMenu.ShowPage1(fmc); 
         };
         
         fmc.onLeftInput[3] = () => {
             FMCSaltyOptions.ShowPage1(fmc); 
+        };
+
+        fmc.onRightInput[3] = () => {
+            FMCPayloadFuel.ShowPage1(fmc);
         };
 
         fmc.onRightInput[4] = () => {

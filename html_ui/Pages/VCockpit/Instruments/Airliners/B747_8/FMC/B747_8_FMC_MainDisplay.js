@@ -63,6 +63,7 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
         this._aThrHasActivated = false;
         this._hasReachedTopOfDescent = false;
         this._apCooldown = 500;
+        this.activeSystem = 'FMC';
         this.simbrief = {
             route: "",
             cruiseAltitude: "",
@@ -85,7 +86,8 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
             inTime: "",
             offTime: "",
             taxiFuel: "",
-            tripFuel: ""
+            tripFuel: "",
+            route_distance: ""
         };
         this.weights = {
             cg: "",
@@ -109,7 +111,7 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
             fowardBaggage: "",
             rearBaggage: "",
             crew: ""
-        }
+        };
         this.times = {
             doors: 0,
             off: 0,
@@ -118,14 +120,25 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
             in: 0,
         };
         this.atc = {
-            isLogged = false,
-            logonAts = "",
-            adsStatus = 0,
-            adsEmergStatus = 0
-        }
-        this.company = {
-            comIcao = SimVar.GetSimVarValue("ATC AIRLINE", "string"),
-            
+            isLogged: true,
+            logonAts: "",
+            adsStatus: 0,
+            adsEmergStatus: 0
+        };
+        this.acars = {
+            fltNo: "",
+            origin: "",
+            destination: "",
+            ete: "",
+            etdUtc: "",
+            airlineId: "",
+            atcFltId: "",
+            cnxSyncAvail: false,
+            cnxSync: false
+        };
+        this.units = {
+            temp: SaltyDataStore.get("OPTIONS_TEMP_UNITS", ""),
+            weight: SaltyDataStore.get("OPTIONS_WEIGHT_UNITS", "")
         }
     }
 
@@ -147,16 +160,37 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
         this._thrustTakeOffTemp = Math.ceil(oat / 10) * 10;
         this.aircraftType = Aircraft.B747_8;
         this.maxCruiseFL = 430;
-        this.onInit = () => { B747_8_FMC_InitRefIndexPage.ShowPage1(this); };
-        this.onLegs = () => { B747_8_FMC_LegsPage.ShowPage1(this); };
-        this.onRte = () => { FMCRoutePage.ShowPage1(this); };
-        this.onDepArr = () => { B747_8_FMC_DepArrIndexPage.ShowPage1(this); };
-        this.onRad = () => { B747_8_FMC_NavRadioPage.ShowPage(this); };
-        this.onVNAV = () => { B747_8_FMC_VNAVPage.ShowPage1(this); };
+        
+        this.onInit = () => {            
+            this.activeSystem = "FMC";
+            B747_8_FMC_InitRefIndexPage.ShowPage1(this);
+        };
+        this.onLegs = () => {
+            this.activeSystem = "FMC";
+            B747_8_FMC_LegsPage.ShowPage1(this);
+        };
+        this.onRte = () => {
+            this.activeSystem = "FMC";
+            FMCRoutePage.ShowPage1(this);
+        };
+        this.onDepArr = () => {
+            this.activeSystem = "FMC";
+            B747_8_FMC_DepArrIndexPage.ShowPage1(this);
+        };
+        this.onRad = () => {
+            this.activeSystem = "FMC";
+            B747_8_FMC_NavRadioPage.ShowPage(this);
+        };
+        this.onVNAV = () => {
+            this.activeSystem = "FMC";
+            B747_8_FMC_VNAVPage.ShowPage1(this);
+        };
         this.onAtc = () => {
+            this.activeSystem = "FMC";
             FMCAtcMenu.ShowPage(this);
         };
         this.onFmcComm = () => {
+            this.activeSystem = "DLNK";
             FMCDlnkMenu.ShowPage1(this);
         };
         FMCMainDisplayPages.MenuPage(this);
@@ -248,7 +282,7 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
             col = 0;
         }
         if (label === "__FMCSEPARATOR") {
-            label = "------------------------";
+            label = "--------------------------";
         }
         if (label !== "") {
             let color = label.split("[color]")[1];
@@ -289,7 +323,7 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
             col = 0;
         }
         if (content === "__FMCSEPARATOR") {
-            content = "------------------------";
+            content = "--------------------------";
         }
         if (content !== "") {
             if (content.indexOf("[s-text]") !== -1) {
@@ -311,13 +345,41 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
         this._lines[row][col] = content;
         this._lineElements[row][col].textContent = this._lines[row][col];
     }
+
+    setRouteRequested(origin, destination, fltNo, coRoute) {
+        fmc.updateRouteOrigin(origin);
+        fmc.updateRouteDestination(destination);
+        fmc.updateFlightNo(fltNo);
+        fmc.updateCoRoute(coRoute);
+    }
     
-    getFOB(useLbs = false) {
-        if (useLbs) {
-            return SimVar.GetSimVarValue("FUEL TOTAL QUANTITY WEIGHT", "pound") / 1000;
-        } else {
-            return (SimVar.GetSimVarValue("FUEL TOTAL QUANTITY WEIGHT", "pound") * 0.453592) / 1000;
+    updateFlightNo(flightNo, callback = EmptyCallback.Boolean) {
+        if (flightNo.length > 7) {
+            this.showErrorMessage(this.defaultInputErrorMessage);
+            return callback(false);
         }
+        SimVar.SetSimVarValue("ATC FLIGHT NUMBER", "string", flightNo, "FMC").then(() => {
+            return callback(true);
+        });
+    }
+    updateCoRoute(coRoute, callback = EmptyCallback.Boolean) {
+        if (coRoute.length > 2) {
+            if (coRoute.length < 10) {
+                if (coRoute === "NONE") {
+                    this.coRoute = undefined;
+                }
+                else {
+                    this.coRoute = coRoute;
+                }
+                return callback(true);
+            }
+        }
+        this.showErrorMessage(this.defaultInputErrorMessage);
+        return callback(false);
+    }
+    
+    getFOB(units) {
+        return SimVar.GetSimVarValue("FUEL TOTAL QUANTITY WEIGHT", units) / 1000;
     }
 
     getWeights(units) {
@@ -366,6 +428,99 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
 
     formatPayloadWeight(value) {
         return (+value).toFixed(0);
+    }
+
+    getUTCTime() {
+        const value = SimVar.GetGlobalVarValue("ZULU TIME", "seconds");
+        if (value) {
+            const seconds = Number.parseInt(value);
+            const time = Utils.SecondsToDisplayTime(seconds, true, true, false);
+            return time.toString();
+        }
+        return "";
+    }
+
+    getUTCDate() {
+        const day = SimVar.GetGlobalVarValue("ZULU DAY OF MONTH", "number");
+        const month = `${SimVar.GetGlobalVarValue("ZULU MONTH OF YEAR", "number")}`.padStart(2,'0');
+        return `${month}:${day}`;
+    }
+
+    getUTCDay() {
+        const day = SimVar.GetGlobalVarValue("ZULU DAY OF MONTH", "number");
+        const month = `${SimVar.GetGlobalVarValue("ZULU MONTH OF YEAR", "number")}`.padStart(2,'0');
+        return `${day}`;
+    }
+
+    getUTCYear() {
+        return SimVar.GetGlobalVarValue("ZULU YEAR", "number").toString().substr(2,4);
+    }
+
+    getLocalTime() {
+        const value = SimVar.GetGlobalVarValue("LOCAL TIME", "seconds");
+        if (value) {
+            const seconds = Number.parseInt(value);
+            const time = Utils.SecondsToDisplayTime(seconds, true, false, false);
+            return time.toString().substr(0,5);
+        }
+        return "";
+    }
+    
+    getFlightTime() {
+        const value = SimVar.GetGameVarValue("FLIGHT DURATION", "seconds");
+        if (value) {
+            const time = Utils.SecondsToDisplayTime(value, true, false, false);
+            return time.toString();
+        }
+        return "";
+    }
+
+    /**
+     * Used for switching pages
+     * @returns {number} delay in ms between 150 and 200
+     */
+    getDelaySwitchPage() {
+        return 150 + 50 * Math.random();
+    }
+
+    /**
+     * Used for basic inputs e.g. alternate airport, ci, fl, temp, constraints, ...
+     * @returns {number} delay in ms between 300 and 400
+     */
+    getDelayBasic() {
+        return 300 + 100 * Math.random();
+    }
+
+    /**
+     * Used for e.g. loading time fore pages
+     * @returns {number} delay in ms between 600 and 800
+     */
+    getDelayMedium() {
+        return 600 + 200 * Math.random();
+    }
+
+    /**
+     * Used for intense calculation
+     * @returns {number} delay in ms between 900 and 12000
+     */
+    getDelayHigh() {
+        return 900 + 300 * Math.random();
+    }
+
+    /**
+     * Used for changes to the flight plan
+     * @returns {number} dynamic delay in ms between ~300 and up to +2000 (depending on additional conditions)
+     */
+    getDelayRouteChange() {
+        return 300 + this.flightPlanManager.getWaypointsCount() * Math.random() + this.flightPlanManager.getDestination().cumulativeDistanceInFP * Math.random();
+    }
+
+    getDelayDownlink() {
+        return 2000 + 1500 * Math.random();
+    }
+
+    getDelayUplink() {
+        return 10000 + 5000 * Math.random();
     }
 
     onInputAircraftSpecific(input) {

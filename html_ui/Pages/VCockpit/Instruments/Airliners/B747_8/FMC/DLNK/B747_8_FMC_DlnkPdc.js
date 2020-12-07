@@ -1,13 +1,13 @@
 class FMCDlnkPdc {
-    static ShowPage(fmc, store = {"stand": "___", "atis": "_", "freeText": "<", "atsUnit": "____"}) {
+    static ShowPage(fmc, store = {"stand": "□□□", "atis": "_", "freeText": "<", "atsUnit": "□□□□"}) {
         fmc.clearDisplay();
 
         let fltNum;
-        let fltNumCell = "____";
+        let fltNumCell = "□□□□";
         let origSta;
-        let origStaCell = "____";
+        let origStaCell = "□□□□";
         let destSta;
-        let destStaCell = "____";
+        let destStaCell = "□□□□";
         let acType = "B748";
         let sendStatus;
         let sendCell = "SEND>";
@@ -72,7 +72,7 @@ class FMCDlnkPdc {
             let value = fmc.inOut;
             fmc.clearUserInput();
             if (value === FMCMainDisplay.clrValue) {
-                store.stand = "___";
+                store.stand = "□□□";
             } else {
                 store.stand = value;
             }
@@ -83,7 +83,7 @@ class FMCDlnkPdc {
             let value = fmc.inOut;
             fmc.clearUserInput();
             if (value === FMCMainDisplay.clrValue) {
-                store.atsUnit = "____";
+                store.atsUnit = "□□□□";
             } else {
                 store.atsUnit = value;
             }

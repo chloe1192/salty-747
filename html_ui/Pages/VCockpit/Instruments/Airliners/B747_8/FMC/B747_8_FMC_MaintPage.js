@@ -1,10 +1,8 @@
-class FMCDlnkArrInfo {
-    static ShowPage(fmc) {
+class FMCMaintPage {
+    static ShowPage1(fmc) {
         fmc.clearDisplay();
         fmc.setTemplate([
-            ["DLNK ARR INFO REQUEST"],
-            [""],
-            ["*CALL RAMP", "CALL CATERING*"],
+            ["MAINT"],
             [""],
             [""],
             [""],
@@ -14,11 +12,11 @@ class FMCDlnkArrInfo {
             [""],
             [""],
             [""],
-            ["<DLNK MENU"]
+            [""],
+            [""],
+            ["<INDEX"]
         ]);
-
-        fmc.onLeftInput[5] = () => {
-            FMCDlnkMenu.ShowPage2(fmc);
-        }
+        fmc.onLeftInput[5] = () => { B747_8_FMC_InitRefIndexPage.ShowPage1(fmc); };
     }
 }
+//# sourceMappingURL=B747_8_FMC_MaintPage.js.map

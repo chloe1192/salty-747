@@ -1,20 +1,23 @@
 class FMCDlnkMenu {
     static ShowPage1(fmc) {
         fmc.clearDisplay();
+
+        fmc.activeSystem = "DLNK";
+
         fmc.setTemplate([
-            ["DLNK MAIN MENU", "1", "2"],
+            ["ACARS MAIN MENU", "1", "2"],
             [],
-            ["<PREFLIGHT", "WX INFO>"],
+            ["<PREFLIGHT", "FLT LOG>"],
             [],
-            ["<PDC", "SEND PIREP>"],
+            ["<INFLIGHT", "ATS LOG>"],
             [],
-            ["<PERF REQUEST", "ARR REPORT>"],
+            ["<POSTFLIGHT", "REPORTS>"],
             [],
-            ["<WT/BAL", "DIVERTING>"],
+            ["", "REQUESTS>"],
             [],
-            ["<OOOI STATUS", "MISC>"],
+            ["", "MISC>"],
             [],
-            ["<FLT LOG", "MESSAGES>"]
+            ["", ""]
         ]);
 
         fmc.onNextPage = () => {
@@ -26,11 +29,11 @@ class FMCDlnkMenu {
         };
 
         fmc.onLeftInput[1] = () => {
-            FMCDlnkPdc.ShowPage(fmc);
+            FMCDlnkInflight.ShowPage(fmc);
         };
 
         fmc.onLeftInput[2] = () => {
-            FMCDlnkPerfRequest.ShowPage(fmc);
+            FMCDlnkPostflight.ShowPage(fmc);
         };
 
         fmc.onLeftInput[3] = () => {

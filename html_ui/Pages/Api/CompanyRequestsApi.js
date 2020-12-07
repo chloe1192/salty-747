@@ -1,4 +1,9 @@
 class CompanyRequestsApi {
+
+    static connectCompany(fltNo, origin, destination, etdUtc, ete, airlineId, atcFltId) {
+        return Promise.resolve();        
+    }
+
     static getMetar(icao, source) {
         if (!icao) {
             throw ("No ICAO provided");
