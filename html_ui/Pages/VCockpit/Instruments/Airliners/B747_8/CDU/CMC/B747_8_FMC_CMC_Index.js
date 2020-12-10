@@ -1,27 +1,70 @@
-class FMC_SAT_Index {
-    static ShowPage(fmc, store = {"printCell": "PRINT LOG"}) {
-		fmc.activeSystem = "SAT";
+class FMC_CMC_Index {
+    static ShowPage(fmc) {
+		fmc.activeSystem = "CMC";
 		fmc.clearDisplay();
 		
 		const updateView = () => {
-			store.printCell = store.printCell;
 			fmc.setTemplate([
-				["ATC INDEX"],
+				["CMC MENU", "1", "2"],
 				["", ""],
-				["<EMERGENCY", "POS REPORT>"],
+				["<PRESENT LEG FAULTS", ""],
 				["", ""],
-				["<REQUEST", "WHEN CAN WE>"],
+				["<CONFIDENCE TESTS", ""],
 				["", ""],
-				["<REPORT", "FREE TEXT>"],
+				["<EICAS MAINT PAGES", ""],
 				["", ""],
-				["<LOG", "CLEARANCE>"],
+				["<GROUND TESTS", ""],
 				["", ""],
-				["<LOGON/STATUS", "VOICE>"],
+				["", ""],
 				["", "", "__FMCSEPARATOR"],
-				[`<${store.printCell}`, ""]
+				["", "HELP>"],
 			]);
 		}
 		updateView();
+		
+		fmc.onNextPage = () => {
+			FMC_SAT_Directory.ShowPage2(fmc);
+		};
+		
+		fmc.onNextPage = () => {
+			FMC_CMC_Index.ShowPage2(fmc);
+		};
+		
+		fmc.onLeftInput[5] = () => {
+			FMC_Menu.ShowPage(fmc);
+		}
+	}
+	
+    static ShowPage(fmc) {
+		fmc.activeSystem = "CMC";
+		fmc.clearDisplay();
+		
+		const updateView = () => {
+			fmc.setTemplate([
+				["CMC MENU", "2", "2"],
+				["", ""],
+				["<EXISTING FAULTS", ""],
+				["", ""],
+				["<FAULT HISTORY", ""],
+				["", ""],
+				["<OTHER FUNCTIONS", ""],
+				["", ""],
+				["", ""],
+				["", ""],
+				["", ""],
+				["", "", "__FMCSEPARATOR"],
+				["", "HELP>"],
+			]);
+		}
+		updateView();
+		
+		fmc.onNextPage = () => {
+			FMC_CMC_Index.ShowPage(fmc);
+		};
+		
+		fmc.onNextPage = () => {
+			FMC_CMC_Index.ShowPage(fmc);
+		};
 		
 		fmc.onLeftInput[5] = () => {
 			FMC_Menu.ShowPage(fmc);
