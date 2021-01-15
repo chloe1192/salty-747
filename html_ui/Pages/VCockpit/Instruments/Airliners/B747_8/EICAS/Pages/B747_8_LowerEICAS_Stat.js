@@ -13,7 +13,7 @@ var B747_8_LowerEICAS_Stat;
         init() {
             this.isInitialised = true;
             this.months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-            this.date = document.querySelector("#date"),
+            this.date = document.querySelector("#date");
             this.utcTime = document.querySelector("#utctime");
             this.elapsedTime = document.querySelector("#time");
         }

@@ -6,11 +6,9 @@ class FMC_MAINT_Sensors {
         const tat = SimVar.GetSimVarValue("TOTAL AIR TEMPERATURE", "celsius").toFixed(0);
         const pressAlt = SimVar.GetSimVarValue("PRESSURE ALTITUDE", "meters").toFixed(0);
 
-
-
         const updateView = () => {
             fmc.setTemplate([
-                ["SENSORS", "1", "3"],
+                ["SENSORS", "1", "4"],
                 ["", "", "AMBIENT"],
                 ["", ""],
                 ["\xa0OAT", "SAT"],
@@ -50,7 +48,7 @@ class FMC_MAINT_Sensors {
         
         const updateView = () => {
             fmc.setTemplate([
-                ["SENSORS", "2", "3"],
+                ["SENSORS", "2", "4"],
                 ["", "", "FUEL"],
                 ["", ""],
                 ["\xa0MAIN 2", "MAIN 3", "CENTER"],
@@ -85,7 +83,7 @@ class FMC_MAINT_Sensors {
         
         const updateView = () => {
             fmc.setTemplate([
-                ["SENSORS", "3", "3"],
+                ["SENSORS", "3", "4"],
                 ["", "", "MISC"],
                 ["", ""],
                 ["\xa0FLIGHT PHASE", ""],
@@ -102,9 +100,50 @@ class FMC_MAINT_Sensors {
         }
         updateView();
 
+        fmc.onNextPage = () => {
+            FMC_MAINT_Sensors.ShowPage4(fmc);            
+        }        
+        
         fmc.onPrevPage = () => {
             FMC_MAINT_Sensors.ShowPage2(fmc);			
         }		
+        
+        fmc.onLeftInput[5] = () => {
+            FMC_MAINT_Index.ShowPage(fmc);
+        }
+    }
+
+    static ShowPage4(fmc) {
+        fmc.clearDisplay();
+        let brakeTemp1 = SimVar.GetSimVarValue("L:747_BRAKE_TEMPERATURE_1", "celsius").toFixed(0);
+        let brakeTemp2 = SimVar.GetSimVarValue("L:747_BRAKE_TEMPERATURE_2", "celsius").toFixed(0);
+        let wheelRpm1 = SimVar.GetSimVarValue("WHEEL RPM:1", "rpm").toFixed(0);
+        let wheelRpm2 = SimVar.GetSimVarValue("WHEEL RPM:2", "rpm").toFixed(0);
+        let centerWheel = SimVar.GetSimVarValue("CENTER WHEEL RPM:1", "rpm").toFixed(0);
+        
+        
+        const updateView = () => {
+            fmc.setTemplate([
+                ["SENSORS", "4", "4"],
+                ["", "", "BRAKES"],
+                ["", ""],
+                ["\xa0BRAKE TEMP 1", "BRAKE TEMP 2"],
+                [`${brakeTemp1}`, `${brakeTemp2}`],
+                ["\xa0WHEEL RPM 1", "WHEEL RPM 2"],
+                [`${wheelRpm1}`, `${wheelRpm2}`],
+                ["\xa0CENTER WHEEL", ""],
+                [`${centerWheel}`, ""],
+                ["", ""],
+                ["", ""],
+                ["\xa0MAINT", "", "__FMCSEPARATOR"],
+                ["<INDEX", ""]
+            ]);
+        }
+        updateView();
+
+        fmc.onPrevPage = () => {
+            FMC_MAINT_Sensors.ShowPage3(fmc);
+        }        
         
         fmc.onLeftInput[5] = () => {
             FMC_MAINT_Index.ShowPage(fmc);
