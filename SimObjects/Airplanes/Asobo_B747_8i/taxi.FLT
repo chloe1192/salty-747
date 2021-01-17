@@ -180,6 +180,9 @@ AuxPowerUnitSwitch=False
 
 [LocalVars.0]
 XMLVAR_SeatBelts=1
+747_Aircond_Knob_1=3
+747_Aircond_Knob_2=3
+747_Aircond_Knob_3=3
 B747_8_MFD_NAV_MODE=2
 SALTY_IRS_STATE=2
 747_IRS_KNOB_1=2
@@ -213,7 +216,7 @@ PanelLights=True
 RecognitionLights=True
 StrobeLights=True
 TaxiLights=True
-WingLights=True
+WingLights=False
 CabinLights=True
 GlareshieldLights=False
 PedestalLights=False
