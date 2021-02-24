@@ -116,6 +116,9 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
             altnFuel: "",
             finResFuel: "",
             contFuel: "",
+            paxNumber: "",
+            paxWeight: "",
+            cargoLoad: "",
             route_distance: "",
             rteUplinkReady: false,            
             perfUplinkReady: false
@@ -180,9 +183,11 @@ class B747_8_FMC_MainDisplay extends Boeing_FMC {
         this.onMenu = () => { 
             FMC_Menu.ShowPage(this);
         };
-        FMC_Menu.ShowPage(this);
+        FMC_COMM_Release.ShowPage2(this);
         this.saltyBase = new SaltyBase();
-        this.saltyBase.init();
+        this.saltyBase.init();Include.addScript("/JS/debug.js", function () {
+        g_modDebugMgr.AddConsole(null);
+});
     }
     onPowerOn() {
         super.onPowerOn();

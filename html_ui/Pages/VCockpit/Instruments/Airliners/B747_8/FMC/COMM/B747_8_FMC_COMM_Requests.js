@@ -11,7 +11,7 @@ class FMC_COMM_Requests {
                 ["", ""],
                 ["<ROUTE[color]inop", "ATIS>"],
                 ["", ""],
-                ["<RELEASE[color]inop", "ARR INFO>[color]inop"],
+                ["<RELEASE", "ARR INFO>[color]inop"],
                 ["", ""],
                 ["<LOADSHEET[color]inop", "LAND PERF>[color]inop"],
                 ["", "FREE TEXT[color]inop"],
@@ -24,6 +24,11 @@ class FMC_COMM_Requests {
         
         fmc.onLeftInput[0] = () => {
             FMC_COMM_PDC.ShowPage(fmc);
+        }
+        
+        /* LSK3 */
+        fmc.onLeftInput[2] = () => {
+            FMC_COMM_Release.ShowPage(fmc);
         }
         
         fmc.onLeftInput[5] = () => {

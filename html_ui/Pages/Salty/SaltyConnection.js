@@ -139,7 +139,6 @@ const getSimBriefPlan = (fmc, store, updateView) => {
             fmc.simbrief["originIcao"] = data.origin.icao_code;
             fmc.simbrief["destinationIcao"] = data.destination.icao_code;
             fmc.simbrief["blockFuel"] = data.fuel.plan_ramp;
-            fmc.simbrief["payload"] = data.weights.payload;
             fmc.simbrief["estZfw"] = data.weights.est_zfw;
             fmc.simbrief["costIndex"] = data.general.costindex;
             fmc.simbrief["navlog"] = data.navlog.fix;
@@ -147,6 +146,11 @@ const getSimBriefPlan = (fmc, store, updateView) => {
             fmc.simbrief["flight_number"] = data.general.flight_number;
             fmc.simbrief["alternateIcao"] = data.alternate.icao_code;
             fmc.simbrief["avgTropopause"] = data.general.avg_tropopause;
+            /* PAYLOAD */
+            fmc.simbrief["paxNumber"] = data.weights.pax_count;
+            fmc.simbrief["paxWeight"] = data.weights.pax_weight;
+            fmc.simbrief["cargo"] = data.weights.cargo;
+            fmc.simbrief["payload"] = data.weights.payload;
             /* TIMES */
             fmc.simbrief["ete"] = data.times.est_time_enroute;
             fmc.simbrief["blockTime"] = data.times.est_block;
