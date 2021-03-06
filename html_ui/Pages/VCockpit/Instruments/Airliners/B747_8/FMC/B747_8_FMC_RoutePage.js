@@ -318,14 +318,23 @@ class FMCRoutePage {
         let activateCell = "";
         if (fmc.flightPlanManager.getCurrentFlightPlanIndex() === 1) {
             if (!fmc.getIsRouteActivated()) {
+                activateCellTitle = "";
                 activateCell = "ACTIVATE>";
                 fmc.onRightInput[5] = () => {
                     fmc.activateRoute();
                     FMCRoutePage.ShowPage2(fmc);
                 };
             }
+        } else if (fmc.currentFlightPhase == 4) {
+            activateCellTitle = "OFFSET";
+            activateCell = "---";
+            fmc.onRightInput[5] = () => {
+                fmc.activateRoute();
+                FMCPerfInitPage.ShowPage1(fmc);
+            };
         }
         else {
+            activateCellTitle = "";
             activateCell = "PERF INIT>";
             fmc.onRightInput[5] = () => {
                 fmc.activateRoute();
@@ -344,7 +353,7 @@ class FMCRoutePage {
             rows[3],
             [""],
             rows[4],
-            [""],
+            ["", activateCellTitle],
             ["<RTE 2", activateCell]
         ]);
         fmc.onPrevPage = () => {
